@@ -8,4 +8,8 @@ public class SalariedClassification extends PaymentClassification {
 		this.salary = salary;
 	}
 
+	public double getSalary() {
+		return salary;
+	}
+
 }
