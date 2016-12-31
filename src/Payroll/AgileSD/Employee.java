@@ -1,5 +1,7 @@
 package Payroll.AgileSD;
 
+import java.util.List;
+
 public class Employee {
 
 	private int empId;
@@ -8,6 +10,8 @@ public class Employee {
 	private PaymentClassification classification;
 	private PaymentSchedule schedule;
 	private PaymentMethod method;
+	//private List<Affiliation> affiliations;
+	private Affiliation affiliation;
 	
 	public Employee(int empId, String name, String address){
 		this.empId = empId;
@@ -61,6 +65,14 @@ public class Employee {
 
 	public void setMethod(PaymentMethod method) {
 		this.method = method;
+	}
+
+	public Affiliation getAffiliation() {
+		return affiliation;
+	}
+
+	public void setAffiliation(Affiliation affiliation) {
+		this.affiliation = affiliation;
 	}
 
 	

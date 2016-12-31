@@ -1,6 +1,6 @@
 package Payroll.AgileSD;
 
-public abstract class AddEmployeeTransaction extends Transaction{
+public abstract class AddEmployeeTransaction implements Transaction{
 
 	protected int itsEmpId;
 	protected String itsName;

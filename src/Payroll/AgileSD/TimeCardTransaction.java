@@ -2,7 +2,7 @@ package Payroll.AgileSD;
 
 import java.util.Date;
 
-public class TimeCardTransaction extends Transaction {
+public class TimeCardTransaction implements Transaction {
 
 	private Date date;
 	private double hours;

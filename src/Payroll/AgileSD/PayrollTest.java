@@ -78,4 +78,86 @@ public class PayrollTest extends TestCase{
 		assertNotNull(sr);
 		assertEquals(2, sr.getAmount());
 	}
+	
+	public void testAddServiceCharge(){
+		int empId = 2;
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.execute();
+		Employee e = PayrollDatabase.getEmployee(empId);
+		assertNotNull(e);
+		int memberId = 88;
+		UnionAffiliation uaf = new UnionAffiliation(memberId, 12.5);
+		e.setAffiliation(uaf);
+		PayrollDatabase.addUnionMember(memberId, e);
+		ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, new Date(2001, 10, 31), 12.95);
+		sct.execute();
+		ServiceCharge sc = uaf.getServiceCharge(new Date(2001, 10, 31));
+		assertNotNull(sc);
+		assertEquals(12.95, sc.getAmount(), .001);
+	}
+	
+	public void testChangeNameTransaction(){
+		int empId = 2;
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.execute();
+		ChangeNameTransaction  ct = new ChangeNameTransaction(empId, "Bill_2");
+		ct.execute();
+		Employee e = PayrollDatabase.getEmployee(empId);
+		assertEquals("Bill_2", e.getName());
+	}
+	
+	public void testChangeHourlyTransaction(){
+		int empId = 3;
+		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+		t.execute();
+		ChangeHourlyTransaction cht = new ChangeHourlyTransaction(empId, 27.25);
+		cht.execute();
+		Employee e = PayrollDatabase.getEmployee(empId);
+		assertNotNull(e);
+		PaymentClassification pc = e.getClassification();
+		assertNotNull(pc);
+		HourlyClassification hc = (HourlyClassification) pc;
+		assertNotNull(hc);
+		assertEquals(27.25, hc.getHourlyRate(), .001);
+		PaymentSchedule ps = e.getSchedule();
+		WeeklySchedule ws = (WeeklySchedule) ps;
+		assertNotNull(ws);
+	}
+	
+	public void testChangeSalariedTransaction(){
+		int empId = 3;
+		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+		t.execute();
+		ChangeSalariedTransaction cht = new ChangeSalariedTransaction(empId, 9000);
+		cht.execute();
+		Employee e = PayrollDatabase.getEmployee(empId);
+		assertNotNull(e);
+		PaymentClassification pc = e.getClassification();
+		assertNotNull(pc);
+		SalariedClassification sc = (SalariedClassification) pc;
+		assertNotNull(sc);
+		assertEquals(9000, sc.getSalary(), .001);
+		PaymentSchedule ps = e.getSchedule();
+		MonthlySchedule ms = (MonthlySchedule) ps;
+		assertNotNull(ms);
+	}
+	
+	public void testChangeCommissionedTransaction(){
+		int empId = 3;
+		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+		t.execute();
+		ChangeCommissionedTransaction cht = new ChangeCommissionedTransaction(empId, 9000, 100.0);
+		cht.execute();
+		Employee e = PayrollDatabase.getEmployee(empId);
+		assertNotNull(e);
+		PaymentClassification pc = e.getClassification();
+		assertNotNull(pc);
+		CommissionedClassification cc = (CommissionedClassification) pc;
+		assertNotNull(cc);
+		assertEquals(9000, cc.getSalary(), .001);
+		assertEquals(100.0, cc.getCommissionRate(), .001);
+		PaymentSchedule ps = e.getSchedule();
+		BiweeklySchedule bs = (BiweeklySchedule) ps;
+		assertNotNull(bs);
+	}
 }

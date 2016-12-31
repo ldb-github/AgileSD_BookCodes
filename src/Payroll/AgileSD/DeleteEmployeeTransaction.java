@@ -1,6 +1,6 @@
 package Payroll.AgileSD;
 
-public class DeleteEmployeeTransaction extends Transaction {
+public class DeleteEmployeeTransaction implements Transaction {
 
 	private int empId;
 	

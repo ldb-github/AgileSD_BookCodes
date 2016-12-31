@@ -2,7 +2,7 @@ package Payroll.AgileSD;
 
 import java.util.Date;
 
-public class SalesReceiptTransaction extends Transaction {
+public class SalesReceiptTransaction implements Transaction {
 
 	private Date date;
 	private int amount;

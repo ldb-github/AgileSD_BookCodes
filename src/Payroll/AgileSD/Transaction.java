@@ -1,6 +1,6 @@
 package Payroll.AgileSD;
 
-public abstract class Transaction {
+public interface Transaction {
 
-	public abstract void execute();
+	public void execute();
 }
