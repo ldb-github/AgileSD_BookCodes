@@ -1,6 +1,6 @@
 package Payroll.AgileSD;
 
-public class SalariedClassification extends PaymentClassification {
+public class SalariedClassification implements PaymentClassification {
 
 	private double salary;
 	
@@ -9,6 +9,11 @@ public class SalariedClassification extends PaymentClassification {
 	}
 
 	public double getSalary() {
+		return salary;
+	}
+
+	@Override
+	public double calculatePay(Paycheck pc) {
 		return salary;
 	}
 

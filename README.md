@@ -9,3 +9,6 @@ Java version book codes for Agile software development principles, patterns, and
 
 20161231
 <p>服务费、修改雇员姓名、支付类别</p>
+
+20170101
+<p>修改支付方式、会员，计算月薪雇员、钟点工薪水</p>

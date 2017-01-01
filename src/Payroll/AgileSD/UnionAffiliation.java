@@ -29,7 +29,17 @@ public class UnionAffiliation implements Affiliation {
 		serviceCharges.add(serviceCharge);
 	}
 
-	
-	
-	
+	public double getDues() {
+		return dues;
+	}
+
+	public int getMemberId() {
+		return memberId;
+	}
+
+	@Override
+	public double calculateDeductions(Paycheck pc) {
+		return 0;
+	}
+
 }

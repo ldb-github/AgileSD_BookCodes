@@ -1,5 +1,9 @@
 package Payroll.AgileSD;
 
-public class PaymentSchedule {
+import java.util.Date;
+
+public interface PaymentSchedule {
+
+	boolean isPayDate(Date payDate);
 
 }

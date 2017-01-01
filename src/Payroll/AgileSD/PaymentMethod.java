@@ -1,5 +1,7 @@
 package Payroll.AgileSD;
 
-public class PaymentMethod {
+public interface PaymentMethod {
+
+	void pay(Paycheck pc);
 
 }

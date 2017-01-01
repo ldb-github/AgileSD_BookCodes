@@ -1,7 +1,9 @@
 package Payroll.AgileSD;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PayrollDatabase {
 
@@ -26,5 +28,16 @@ public class PayrollDatabase {
 
 	public static Employee getUnionMember(int memberId) {
 		return members.get(memberId);
+	}
+
+	public static void RemoveUnionMember(int memberId) {
+		members.remove(memberId);
+	}
+
+	public static void getAllEmployyIds(List<Integer> empIds) {
+		Set<Integer> keys = employees.keySet();
+		for(int empId : keys){
+			empIds.add(empId);
+		}
 	}
 }

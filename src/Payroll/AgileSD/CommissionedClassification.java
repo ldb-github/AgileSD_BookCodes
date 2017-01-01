@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CommissionedClassification extends PaymentClassification {
+public class CommissionedClassification implements PaymentClassification {
 
 	private double salary;
 	private double commissionRate;
@@ -35,6 +35,12 @@ public class CommissionedClassification extends PaymentClassification {
 
 	public void addSalesReceipt(SalesReceipt salesReceipt) {
 		salesReceipts.add(salesReceipt);
+	}
+
+	@Override
+	public double calculatePay(Paycheck pc) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	

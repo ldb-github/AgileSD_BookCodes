@@ -1,5 +1,7 @@
 package Payroll.AgileSD;
 
-public class PaymentClassification {
+public interface PaymentClassification {
+
+	public double calculatePay(Paycheck pc);
 
 }

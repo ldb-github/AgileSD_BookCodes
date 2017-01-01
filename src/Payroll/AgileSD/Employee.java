@@ -1,5 +1,6 @@
 package Payroll.AgileSD;
 
+import java.util.Date;
 import java.util.List;
 
 public class Employee {
@@ -73,6 +74,20 @@ public class Employee {
 
 	public void setAffiliation(Affiliation affiliation) {
 		this.affiliation = affiliation;
+	}
+
+	public boolean isPayDate(Date payDate){
+		return schedule.isPayDate(payDate);
+	}
+
+	public void payday(Paycheck pc) {
+		double grossPay = classification.calculatePay(pc);
+		double deductions = affiliation.calculateDeductions(pc);
+		double netPay = grossPay - deductions;
+		pc.setGrossPay(grossPay);
+		pc.setDeductions(deductions);
+		pc.setNetPay(netPay);
+		method.pay(pc);
 	}
 
 	
