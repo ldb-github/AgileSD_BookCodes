@@ -1,7 +1,6 @@
 package Payroll.AgileSD;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -43,21 +42,33 @@ public class HourlyClassification implements PaymentClassification {
 		}
 		return grossPay;
 	}
-
+	/**
+	 * 判断时间卡片是否在结算周期内
+	 * @param tc
+	 * @param payPeriod
+	 * @return
+	 */
 	private boolean isInPeriod(TimeCard tc, Date payPeriod){
 		Date periodEndDate = payPeriod;
-		Calendar c = Calendar.getInstance();
-		c.setTime(periodEndDate);
-		c.set(Calendar.DAY_OF_MONTH, -5);
-		Date periodStartDate = c.getTime();
-		Date cardDate = tc.getDate();
+		Date periodStartDate = DateUtil.before(payPeriod, 6); 
+		Date workDate = tc.getDate();
 		
-		return (cardDate.getTime() >= periodStartDate.getTime() && 
-				cardDate.getTime() <= periodEndDate.getTime());
+		return (DateUtil.isAfter(workDate, periodStartDate) && 
+				DateUtil.isBefore(workDate, periodEndDate));
 	}
+	/**
+	 * 计算一张卡片的薪水
+	 * @param tc
+	 * @return
+	 */
 	private double calculatePayForTimeCard(TimeCard tc){
 		double hours = tc.getHours();
-		double overtime = Math.max(0.0, hours - 8.0);
+		double overtime = 0;
+		if(DateUtil.isWeekend(tc.getDate())){
+			overtime = hours;
+		}else{
+			overtime = Math.max(0.0, hours - 8.0);
+		}
 		double straightTime = hours - overtime;
 		
 		return (straightTime + overtime * 1.5) * hourlyRate; 

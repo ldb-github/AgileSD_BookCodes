@@ -163,8 +163,8 @@ public class PayrollTest extends TestCase{
 	 * 修改雇员为酬金雇员
 	 */
 	public void testChangeCommissionedTransaction(){
-		int empId = 3;
-		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Lance", "Home", 2500, 3.2);
+		int empId = 1;
+		AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
 		t.execute();
 		ChangeCommissionedTransaction cht = new ChangeCommissionedTransaction(empId, 9000, 100.0);
 		cht.execute();
@@ -324,7 +324,7 @@ public class PayrollTest extends TestCase{
 		tct.execute();
 		PaydayTransaction pt = new PaydayTransaction(payDate);
 		pt.execute();
-		validatePaycheck(pt, empId, payDate, 0.0);
+		validatePaycheck(pt, empId, payDate, 30.5);
 	}
 	/**
 	 * 发薪日计算只有一张时间卡且工时大于8小时的钟点工的薪水
@@ -339,6 +339,51 @@ public class PayrollTest extends TestCase{
 		PaydayTransaction pt = new PaydayTransaction(payDate);
 		pt.execute();
 		validatePaycheck(pt, empId, payDate, (8 + 1.5) * 15.25);
+	}
+	/**
+	 * 钟点工周末加班薪水计算
+	 */
+	public void testPaySingleHourlyEmployeeWithWeekendTimeCards(){
+		int empId = 2;
+		AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+		t.execute();
+		Date weekendDate = new Date(116, 11, 25); // Sunday
+		TimeCardTransaction tct = new TimeCardTransaction(weekendDate, 9.0, empId);
+		tct.execute();
+		Date payDate = new Date(116, 11, 30); // Friday
+		tct = new TimeCardTransaction(payDate, 2.0, empId);
+		tct.execute();
+		PaydayTransaction pt = new PaydayTransaction(payDate);
+		pt.execute();
+		validatePaycheck(pt, empId, payDate, (2 + 9 * 1.5) * 15.25);
+	}
+	/**
+	 * 酬金雇员薪水计算
+	 */
+	public void testPaySingleCommissionedEmployeeOneSalesReceipt(){
+		int empId = 4;
+		AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "LDB", "Home", 9000.0, 100.0);
+		t.execute();
+		Date workDate = new Date(116, 11, 19);
+		SalesReceiptTransaction srt = new SalesReceiptTransaction(workDate, 2, empId);
+		srt.execute();
+		Employee e = PayrollDatabase.getEmployee(empId);
+		assertNotNull(e);
+		assertEquals("LDB", e.getName());
+		
+		PaymentClassification pc = e.getClassification();
+		CommissionedClassification cc = (CommissionedClassification) pc;
+		assertEquals(9000, cc.getSalary(), .001);
+		assertEquals(100, cc.getCommissionRate(), .001);
+		SalesReceipt sr = cc.getSalesReceipt(workDate);
+		assertNotNull(sr);
+		assertEquals(2, sr.getAmount());
+		//Date payDate = new Date(116, 11, 30);
+		Date payDate = new Date(116, 11, 31);
+		PaydayTransaction pt = new PaydayTransaction(payDate);
+		pt.execute();
+		//validatePaycheck(pt, empId, payDate, 100.0 * 2);
+		validatePaycheck(pt, empId, payDate, 9000);
 	}
 	
 	private void validatePaycheck(PaydayTransaction pt, int empId, Date payDate, double pay) {

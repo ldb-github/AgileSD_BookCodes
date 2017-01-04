@@ -6,8 +6,7 @@ public class BiweeklySchedule implements PaymentSchedule {
 
 	@Override
 	public boolean isPayDate(Date payDate) {
-		// TODO Auto-generated method stub
-		return false;
+		return DateUtil.isLastDayOfMonth(payDate) || DateUtil.isFriday(payDate);
 	}
 
 }
